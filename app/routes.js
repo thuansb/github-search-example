@@ -22,12 +22,17 @@ export default function createRoutes(store) {
       name: 'home',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
+          import('containers/GhSearch/reducer'),
+          import('containers/GhSearch/sagas'),
           import('containers/HomePage'),
         ]);
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([component]) => {
+        importModules.then(([ghSearchReducer, ghSearchSagas, component, ]) => {
+          injectReducer('ghSearch', ghSearchReducer.default);
+          injectSagas(ghSearchSagas.default);
+
           renderRoute(component);
         });
 
