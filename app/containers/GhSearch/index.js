@@ -2,12 +2,14 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import UserSummary from 'components/UserSummary';
+import SearchForm from 'components/SearchForm';
+import LoadingIndicator from 'components/LoadingIndicator';
 import { searchUser } from './actions';
 import makeSelectGhSearch from './selectors';
 
 export class GhSearch extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
-    const { searchResult: { items: users = [] } } = this.props.GhSearch;
+    const { searching, searchResult: { items: users = [] } } = this.props.GhSearch;
     return (
       <div>
         <nav className="level">
@@ -16,30 +18,29 @@ export class GhSearch extends React.Component { // eslint-disable-line react/pre
               <p className="subtitle is-5">GitHub User</p>
             </div>
             <div className="level-item">
-              <p className="control has-addons">
-                <input ref={(c) => { this.searchTerm = c; }} className="input" type="text" placeholder="Find a user" />
-                <button className="button" onClick={() => this.props.handleSearch(this.searchTerm.value)}>
-                  Search
-                </button>
-              </p>
+              <SearchForm handleSearch={this.props.handleSearch} />
             </div>
           </div>
         </nav>
-        <div>
-          <ul>
-            {
-              users.length > 0 ? users.map(
-                (u) => (
-                  <li key={u.id}>
-                    <UserSummary user={u} />
-                  </li>
-                )
-              ) : (
-                <li>No user found!</li>
-              )
-            }
-          </ul>
-        </div>
+        {
+          searching ? <LoadingIndicator /> : (
+            <div>
+              <ul>
+                {
+                  users.length > 0 ? users.map(
+                    (u) => (
+                      <li key={u.id}>
+                        <UserSummary user={u} />
+                      </li>
+                    )
+                  ) : (
+                    <li>No user found!</li>
+                  )
+                }
+              </ul>
+            </div>
+          )
+        }
       </div>
     );
   }

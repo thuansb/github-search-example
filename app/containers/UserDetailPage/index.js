@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import UserDetail from 'components/UserDetail';
+import LoadingIndicator from 'components/LoadingIndicator';
 import RepoSummary from 'components/RepoSummary';
 import { goBack } from 'react-router-redux';
 import makeSelectUserDetail from './selectors';
@@ -19,23 +20,27 @@ export class UserDetailPage extends React.Component { // eslint-disable-line rea
   }
 
   render() {
-    const { info, repos } = this.props.UserDetail;
+    const { info, repos, detailLoading, repoLoading } = this.props.UserDetail;
     return (
       <div>
         <h3 className="title is-3">User detail</h3>
-        <UserDetail user={info} handleBackButton={this.props.backToPreviousPage} />
+        {repoLoading ? <LoadingIndicator /> : <UserDetail user={info} handleBackButton={this.props.backToPreviousPage} />}
         <h3 className="title is-3">Repo list</h3>
-        <ul>
-          {
-            repos.map(
-              (repo) => (
-                <li key={repo.id}>
-                  <RepoSummary repo={repo} />
-                </li>
-              )
-            )
-          }
-        </ul>
+        {
+          detailLoading ? <LoadingIndicator /> : (
+            <ul>
+              {
+                repos.map(
+                  (repo) => (
+                    <li key={repo.id}>
+                      <RepoSummary repo={repo} />
+                    </li>
+                  )
+                )
+              }
+            </ul>
+          )
+        }
       </div>
     );
   }
