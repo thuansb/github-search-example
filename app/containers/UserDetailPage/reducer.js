@@ -22,13 +22,13 @@ function userDetailReducer(state = initialState, action) {
       return state.set('err', null)
                   .set('loading', true);
     case SUCCEED_FETCH_USER_DETAIL:
-      return state.set('info', action.payload.info);
+      return state.set('info', fromJS(action.payload.info));
     case FAILED_FETCH_USER_DETAIL:
-      return state.set('err', action.payload.err);
+      return state.set('err', fromJS(action.payload.err));
     case SUCCEED_FETCH_USER_REPOS:
-      return state.set('repos', action.payload.repos);
+      return state.set('repos', fromJS(action.payload.repos));
     case FAILED_FETCH_USER_REPOS:
-      return state.set('err', action.payload.err);
+      return state.set('err', fromJS(action.payload.err));
     default:
       return state;
   }

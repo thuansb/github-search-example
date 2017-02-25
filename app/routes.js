@@ -43,9 +43,9 @@ export default function createRoutes(store) {
       name: 'userDetail',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          import('containers/UserDetail/reducer'),
-          import('containers/UserDetail/sagas'),
-          import('containers/UserDetail'),
+          import('containers/UserDetailPage/reducer'),
+          import('containers/UserDetailPage/sagas'),
+          import('containers/UserDetailPage'),
         ]);
 
         const renderRoute = loadModule(cb);

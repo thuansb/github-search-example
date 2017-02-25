@@ -1,10 +1,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import UserDetail from 'components/UserDetail';
+import RepoSummary from 'components/RepoSummary';
+import { goBack } from 'react-router-redux';
 import makeSelectUserDetail from './selectors';
 import { fetchUserDetail, fetchUserRepos } from './actions';
 
-export class UserDetail extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class UserDetailPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   componentWillMount() {
     const { dispatch, params: { uid } } = this.props;
@@ -19,27 +22,18 @@ export class UserDetail extends React.Component { // eslint-disable-line react/p
     const { info, repos } = this.props.UserDetail;
     return (
       <div>
-        <h3>User detail</h3>
-        <hr />
-        <p>{info.login}</p>
-        <p>{info.id}</p>
-        <p>{info.avatar_url}</p>
-        <p>{info.html_url}</p>
-        <p>{info.repos_url}</p>
-        <p>{info.name}</p>
-        <p>{info.blog}</p>
-        <p>{info.email}</p>
-        <p>{info.hireable}</p>
-        <p>{info.bio}</p>
-        <p>{info.public_repos}</p>
-        <p>{info.public_gists}</p>
-        <p>{info.followers}</p>
-        <p>{info.following}</p>
-        <h3>Repo list</h3>
-        <hr />
+        <h3 className="title is-3">User detail</h3>
+        <UserDetail user={info} handleBackButton={this.props.backToPreviousPage} />
+        <h3 className="title is-3">Repo list</h3>
         <ul>
           {
-            repos.map((repo) => <li key={repo.id}><a href={repo.html_url}>{repo.name}</a></li>)
+            repos.map(
+              (repo) => (
+                <li key={repo.id}>
+                  <RepoSummary repo={repo} />
+                </li>
+              )
+            )
           }
         </ul>
       </div>
@@ -47,10 +41,11 @@ export class UserDetail extends React.Component { // eslint-disable-line react/p
   }
 }
 
-UserDetail.propTypes = {
+UserDetailPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   params: PropTypes.object,
   UserDetail: PropTypes.object,
+  backToPreviousPage: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -59,8 +54,9 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    backToPreviousPage: () => dispatch(goBack()),
     dispatch,
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(UserDetailPage);
