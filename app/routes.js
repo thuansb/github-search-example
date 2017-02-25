@@ -29,10 +29,30 @@ export default function createRoutes(store) {
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([ghSearchReducer, ghSearchSagas, component, ]) => {
+        importModules.then(([ghSearchReducer, ghSearchSagas, component]) => {
           injectReducer('ghSearch', ghSearchReducer.default);
           injectSagas(ghSearchSagas.default);
 
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      path: '/u/:uid',
+      name: 'userDetail',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('containers/UserDetail/reducer'),
+          import('containers/UserDetail/sagas'),
+          import('containers/UserDetail'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('userDetail', reducer.default);
+          injectSagas(sagas.default);
           renderRoute(component);
         });
 

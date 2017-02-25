@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { searchUser } from './actions';
@@ -19,7 +20,7 @@ export class GhSearch extends React.Component { // eslint-disable-line react/pre
               users.map(
                 (u) => (
                   <li key={u.id}>
-                    <a href={u.url}>{u.login}</a>
+                    <Link to={`/u/${u.login}`}>{u.login}</Link>
                   </li>
                 )
               )
@@ -33,6 +34,7 @@ export class GhSearch extends React.Component { // eslint-disable-line react/pre
 
 GhSearch.propTypes = {
   handleSearch: PropTypes.func.isRequired,
+  GhSearch: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -7,7 +7,7 @@
 import {
   SEARCH_USER,
   SUCCEED_SEARCH_USER,
-  FAILED,
+  FAILED_SEARCH_USER,
 } from './constants';
 
 export function searchUser(searchTerm) {
@@ -30,7 +30,7 @@ export function succeedSearchUser(rs) {
 
 export function failedSearchUser(err) {
   return {
-    type: FAILED,
+    type: FAILED_SEARCH_USER,
     payload: {
       err,
     },
